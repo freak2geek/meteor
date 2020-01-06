@@ -318,7 +318,8 @@ var runCommandOptions = {
     // Allow the version solver to make breaking changes to the versions
     // of top-level dependencies.
     'allow-incompatible-update': { type: Boolean },
-    'extra-packages': { type: String }
+    'extra-packages': { type: String },
+    'exclude-archs': { type: String }
   },
   catalogRefresh: new catalog.Refresh.Never()
 };
@@ -340,6 +341,13 @@ function doRunCommand(options) {
   var includePackages = [];
   if (options['extra-packages']) {
     includePackages = options['extra-packages'].trim().split(/\s*,\s*/);
+  }
+
+  var excludeArchs = [];
+  const excludableArchs = ['web.browser', 'web.browser.legacy', 'web.cordova'];
+  if (options['exclude-archs']) {
+    excludeArchs = options['exclude-archs'].trim().split(/\s*,\s*/)
+      .filter(arch => excludableArchs.includes(arch));
   }
 
   var projectContext = new projectContextModule.ProjectContext({
@@ -400,6 +408,8 @@ function doRunCommand(options) {
     }
   }
 
+  webArchs = webArchs.filter(arch => !excludeArchs.includes(arch));
+ 
   let cordovaRunner;
   if (!_.isEmpty(runTargets)) {
 

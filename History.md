@@ -42,6 +42,13 @@
 
 * The `typescript` npm package has been updated to version 3.7.3.
 
+* You can now use the `--exclude-archs` CLI argument for the run command
+  to temporarily disable building certain web architectures.
+  For example: `meteor run --exclude-archs web.browser.legacy`.
+  You can pass multiple architectures comma seperated.
+  This can be used to improve rebuild times if you're not actively testing
+  those architectures during development.
+
 ## v1.8.2, 2019-11-14
 
 ### Breaking changes
